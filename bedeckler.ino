@@ -1,9 +1,14 @@
 #include <FtduinoSimple.h>
-//#include <AccessNode.h>
+#include <AccessNode.h>
 
 int i3Wert = 0;
+RobotikInterConnect* ric;
+int counter = 0;
+bool isClicked = false;
+
 
 void setup() {
+    ric = new RobotikInterConnect("bedeckler");
     ftduino.motor_set(Ftduino::M2, Ftduino::LEFT);
     while (!ftduino.input_get(Ftduino::I2)) delay(1);
     ftduino.motor_set(Ftduino::M2, Ftduino::OFF);
@@ -25,6 +30,7 @@ void loop() {
 //
 
 void run() {
+  ric->send("mfc","websocket","OK");
   ftduino.output_set(Ftduino::O8, Ftduino::HI);
 
   while (ftduino.input_get(Ftduino::I1)) delay(1);
@@ -63,16 +69,10 @@ void run() {
     while (!ftduino.input_get(Ftduino::I2)) delay(1);
     ftduino.motor_set(Ftduino::M2, Ftduino::OFF);
 
+  ric->send("mfc","websocket","NEXT");
   ftduino.motor_set(Ftduino::M3, Ftduino::LEFT);
     while (!ftduino.input_get(Ftduino::I6)) delay(1);
     ftduino.motor_set(Ftduino::M3, Ftduino::OFF);
-  
-
-
-
-  
-
-
 
   delay(500);
 }
