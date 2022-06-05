@@ -7,7 +7,7 @@ int counter = 0;
 bool isClicked = false;
 
 
-void setup() { //############## Aktuelle Labels an Maschiene stimmen ##############
+void setup() { //############## Aktuelle Labels an Maschiene sind korrekt ##############
     ric = new RobotikInterConnect("bedeckler");
 
     ftduino.motor_set(Ftduino::M2, Ftduino::LEFT); //Deckelmodul fährt in Ausgansposition
