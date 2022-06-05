@@ -31,6 +31,8 @@ void loop() {
 //
 
 void run() {
+  ftduino.output_set(Ftduino::O8, Ftduino::OFF); //Hauptförderband aus
+
   ric->send("mfc","websocket","OK"); //ric Anbindung -> sendet OK
   ric->read_wait(); //Bedeckler wartet auf GO von ric
 
