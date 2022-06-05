@@ -7,17 +7,18 @@ int counter = 0;
 bool isClicked = false;
 
 
-void setup() {
+void setup() { //############## Aktuelle Labels an Maschiene stimmen ##############
     ric = new RobotikInterConnect("bedeckler");
-    ftduino.motor_set(Ftduino::M2, Ftduino::LEFT);
+
+    ftduino.motor_set(Ftduino::M2, Ftduino::LEFT); //Deckelmodul fährt in Ausgansposition
     while (!ftduino.input_get(Ftduino::I2)) delay(1);
     ftduino.motor_set(Ftduino::M2, Ftduino::OFF);
 
-    ftduino.motor_set(Ftduino::M1, Ftduino::LEFT);
+    ftduino.motor_set(Ftduino::M1, Ftduino::LEFT); //Pressmodul fährt in Ausgansposition
     while (!ftduino.input_get(Ftduino::I5)) delay(1);
     ftduino.motor_set(Ftduino::M1, Ftduino::OFF);
 
-    ftduino.motor_set(Ftduino::M3, Ftduino::LEFT);
+    ftduino.motor_set(Ftduino::M3, Ftduino::LEFT); //Schranke fährt in Ausgansposition
     while (!ftduino.input_get(Ftduino::I6)) delay(1);
     ftduino.motor_set(Ftduino::M3, Ftduino::OFF);
 
@@ -30,52 +31,51 @@ void loop() {
 //
 
 void run() {
-  ric->send("mfc","websocket","OK");
-  ric->read_wait();
+  ric->send("mfc","websocket","OK"); //ric Anbindung -> sendet OK
+  ric->read_wait(); //Bedeckler wartet auf GO von ric
 
-  ftduino.output_set(Ftduino::O8, Ftduino::HI);
+  ftduino.output_set(Ftduino::O8, Ftduino::HI); //Hauptförderband an
 
-  while (ftduino.input_get(Ftduino::I1)) delay(1);
+  while (ftduino.input_get(Ftduino::I1)) delay(1); // Lichtsensor 1 wartet auf Eingabe
   delay(500);
 
-  ftduino.output_set(Ftduino::O8, Ftduino::OFF);
+  ftduino.output_set(Ftduino::O8, Ftduino::OFF); //Hauptförderband aus
 
-  ftduino.output_set(Ftduino::O7, Ftduino::HI); //Deckel drauf
+  ftduino.output_set(Ftduino::O7, Ftduino::HI); //Deckelspirale an
   delay(6000);
-  ftduino.output_set(Ftduino::O7, Ftduino::OFF);
+  ftduino.output_set(Ftduino::O7, Ftduino::OFF); //Deckelspirale aus
 
-  ftduino.motor_set(Ftduino::M2, Ftduino::RIGHT); //Deckler zurück
+  ftduino.motor_set(Ftduino::M2, Ftduino::RIGHT); //Deckelmodul fährt zurück
   while (!ftduino.input_get(Ftduino::I3)) delay(1);
-    ftduino.motor_set(Ftduino::M2, Ftduino::OFF);
+    ftduino.motor_set(Ftduino::M2, Ftduino::OFF); //Deckelmodul stoppt an Schalter
 
-  ftduino.output_set(Ftduino::O8, Ftduino::HI); //Band an
+  ftduino.output_set(Ftduino::O8, Ftduino::HI); //Hauptförderband an
 
-  while (ftduino.input_get(Ftduino::I4)) delay(1); //Sensor 2
+  while (ftduino.input_get(Ftduino::I4)) delay(1); //Lichtsensor 2 wartet auf Eingabe
   delay(2000);
 
-  ftduino.output_set(Ftduino::O8, Ftduino::OFF);
+  ftduino.output_set(Ftduino::O8, Ftduino::OFF); //Hauptförderband aus
 
-  ftduino.motor_set(Ftduino::M1, Ftduino::RIGHT); //Presse
+  ftduino.motor_set(Ftduino::M1, Ftduino::RIGHT); //Pressmodul fährt runter / presst
   delay(2400);
-  ftduino.motor_set(Ftduino::M1, Ftduino::LEFT);
+  ftduino.motor_set(Ftduino::M1, Ftduino::LEFT); //Pressmodul fährt hoch
   while (!ftduino.input_get(Ftduino::I5)) delay(1);
-    ftduino.motor_set(Ftduino::M1, Ftduino::OFF);
+    ftduino.motor_set(Ftduino::M1, Ftduino::OFF); //Pressmodul stoppt an Schalter
   
-  ftduino.motor_set(Ftduino::M3, Ftduino::RIGHT);
+  ftduino.motor_set(Ftduino::M3, Ftduino::RIGHT); //Schranke geht auf
   delay(2500);
-  ftduino.motor_set(Ftduino::M3, Ftduino::OFF);
+  ftduino.motor_set(Ftduino::M3, Ftduino::OFF); //Schranke aus
 
-  ftduino.output_set(Ftduino::O8, Ftduino::HI);
+  ric->send("mfc","websocket","NEXT"); //Bedeckler sendet NEXT an ric
+  ric->read_wait(); //Bedeckler wartet auf GO von ric
 
-  ftduino.motor_set(Ftduino::M2, Ftduino::LEFT);
+  ftduino.output_set(Ftduino::O8, Ftduino::HI); //Hauptförderband an
+
+  ftduino.motor_set(Ftduino::M2, Ftduino::LEFT); //Deckelmodul fährt in Ausgansposition
     while (!ftduino.input_get(Ftduino::I2)) delay(1);
     ftduino.motor_set(Ftduino::M2, Ftduino::OFF);
 
-  ric->send("mfc","websocket","NEXT");
-  ric->read_wait();
-
-  
-  ftduino.motor_set(Ftduino::M3, Ftduino::LEFT);
+  ftduino.motor_set(Ftduino::M3, Ftduino::LEFT); //Schranke fährt in Ausgangsposition
     while (!ftduino.input_get(Ftduino::I6)) delay(1);
     ftduino.motor_set(Ftduino::M3, Ftduino::OFF);
 
