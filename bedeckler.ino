@@ -31,6 +31,8 @@ void loop() {
 
 void run() {
   ric->send("mfc","websocket","OK");
+  ric->read_wait();
+
   ftduino.output_set(Ftduino::O8, Ftduino::HI);
 
   while (ftduino.input_get(Ftduino::I1)) delay(1);
@@ -70,6 +72,9 @@ void run() {
     ftduino.motor_set(Ftduino::M2, Ftduino::OFF);
 
   ric->send("mfc","websocket","NEXT");
+  ric->read_wait();
+
+  
   ftduino.motor_set(Ftduino::M3, Ftduino::LEFT);
     while (!ftduino.input_get(Ftduino::I6)) delay(1);
     ftduino.motor_set(Ftduino::M3, Ftduino::OFF);
