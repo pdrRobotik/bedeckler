@@ -39,7 +39,7 @@ void run() {
   ftduino.output_set(Ftduino::O8, Ftduino::HI); //Hauptförderband an
 
   while (ftduino.input_get(Ftduino::I1)) delay(1); // Lichtsensor 1 wartet auf Eingabe
-  delay(500);
+  delay(800);
 
   ftduino.output_set(Ftduino::O8, Ftduino::OFF); //Hauptförderband aus
 
